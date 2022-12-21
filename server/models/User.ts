@@ -31,8 +31,10 @@ const userSchema = new Schema<Iuser>({
     contacts : [{
         name: String,
         phone:{
-            type: String
-        }
+            type: String,
+            unique: false
+        },
+        required : false
     }]
 })
 
