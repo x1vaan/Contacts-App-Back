@@ -1,5 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 import bcrypt from 'bcrypt';
+import contactSchema from "./Contacts";
 
 interface Contacts {
     name : string;
@@ -28,14 +29,7 @@ const userSchema = new Schema<Iuser>({
         required : true,
         unique : true
     },
-    contacts : [{
-        name: String,
-        phone:{
-            type: String,
-            unique: false
-        },
-        required : false
-    }]
+    contacts : [contactSchema]
 })
 
 userSchema.pre('save', async function(next) {

@@ -7,12 +7,17 @@ router.put('/addcontact', async (req: Request,res: Response):Promise<any | void>
     try {
         const id = req.user?.id
         const {name, phone} = req.body
-        await User.updateOne({_id : id}, {
-            $push: {
-                contacts: {name,phone}
-            }
-        })
-        res.status(201).send('Contact added')
+        const repeatedContact = await User.findById(id);
+        if(!repeatedContact?.contacts?.some(contact => contact.phone == phone)) {
+         await User.updateOne({_id: id}, {
+          $push : {
+               contacts : {name, phone}
+          }
+         })
+         res.status(201).send('Contact added')
+        } else {
+          res.status(409).send('Two contacts with the same phone')
+        }
     } catch (error) {
         res.status(500).send(error.message)
     }
